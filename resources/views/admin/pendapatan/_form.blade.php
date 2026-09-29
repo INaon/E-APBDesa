@@ -1,10 +1,129 @@
-<div class="grid gap-5 md:grid-cols-2">
-    <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-700">Tahun Anggaran</span><select name="tahun_anggaran_id" required class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">@foreach ($years as $year)<option value="{{ $year->id }}" @selected(old('tahun_anggaran_id', $pendapatan->tahun_anggaran_id ?? '') == $year->id)>{{ $year->tahun }}{{ $year->status === 'aktif' ? ' · Aktif' : '' }}</option>@endforeach</select>@error('tahun_anggaran_id')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
-    <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-700">Kode</span><input name="kode" value="{{ old('kode', $pendapatan->kode ?? '') }}" required maxlength="50" placeholder="Contoh: 1.2" class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">@error('kode')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
-    <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-700">Kelompok Pendapatan</span><input name="kelompok" value="{{ old('kelompok', $pendapatan->kelompok ?? '') }}" required maxlength="255" placeholder="Contoh: Transfer" class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">@error('kelompok')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
-    <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-700">Urutan Tampil</span><input type="number" name="urutan" value="{{ old('urutan', $pendapatan->urutan ?? 0) }}" min="0" class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">@error('urutan')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
-    <label class="block md:col-span-2"><span class="mb-2 block text-sm font-semibold text-slate-700">Uraian Pendapatan</span><input name="uraian" value="{{ old('uraian', $pendapatan->uraian ?? '') }}" required maxlength="255" placeholder="Contoh: Dana Desa" class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">@error('uraian')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
-    <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-700">Anggaran (Rp)</span><input type="number" name="anggaran" value="{{ old('anggaran', $pendapatan->anggaran ?? '') }}" required min="0" step="0.01" placeholder="0" class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">@error('anggaran')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
-    <label class="block"><span class="mb-2 block text-sm font-semibold text-slate-700">Status Publikasi</span><select name="status_publikasi" required class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"><option value="draft" @selected(old('status_publikasi', $pendapatan->status_publikasi ?? 'draft') === 'draft')>Draft</option><option value="dipublikasikan" @selected(old('status_publikasi', $pendapatan->status_publikasi ?? '') === 'dipublikasikan')>Dipublikasikan</option></select>@error('status_publikasi')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror</label>
+<div class="grid gap-5 md:grid-cols-2" x-data="{ search: '', selected: '{{ old('pendapatan_rekening_id', $pendapatan->pendapatan_rekening_id ?? '') }}' }">
+    <label class="block">
+        <span class="mb-2 block text-sm font-semibold text-slate-700">Tahun Anggaran</span>
+        <select name="tahun_anggaran_id" required class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            @foreach ($years as $year)
+                <option value="{{ $year->id }}" @selected(old('tahun_anggaran_id', $pendapatan->tahun_anggaran_id ?? '') == $year->id)>
+                    {{ $year->tahun }}{{ $year->status === 'aktif' ? ' · Aktif' : '' }}
+                </option>
+            @endforeach
+        </select>
+        @error('tahun_anggaran_id')
+            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+        @enderror
+    </label>
+
+    <label class="block">
+        <span class="mb-2 block text-sm font-semibold text-slate-700">Urutan Tampil</span>
+        <input
+            type="number"
+            name="urutan"
+            value="{{ old('urutan', $pendapatan->urutan ?? 0) }}"
+            min="0"
+            class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+        @error('urutan')
+            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+        @enderror
+    </label>
+
+    <div class="md:col-span-2">
+        <span class="mb-2 block text-sm font-semibold text-slate-700">Rekening Pendapatan</span>
+
+        <input
+            x-model="search"
+            type="search"
+            placeholder="Cari kode atau uraian rekening…"
+            class="mb-2 w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+
+        <select
+            x-ref="rekening"
+            name="pendapatan_rekening_id"
+            x-model="selected"
+            required
+            size="8"
+            class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+            @foreach ($rekenings as $rekening)
+                <option
+                    value="{{ $rekening->id }}"
+                    x-show="'{{ strtolower($rekening->kode . ' ' . $rekening->uraian) }}'.includes(search.toLowerCase())"
+                >
+                    {{ $rekening->kode }} — {{ $rekening->uraian }}
+                </option>
+            @endforeach
+        </select>
+
+        <p class="mt-2 text-xs text-slate-500">
+            Hanya rekening detail yang dapat dipilih. Kode, uraian, dan kelompok akan mengikuti master rekening.
+        </p>
+
+        @error('pendapatan_rekening_id')
+            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div class="rounded-xl bg-slate-50 p-4 md:col-span-2">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Rekening Terpilih
+        </p>
+
+        <p
+            class="mt-1 font-semibold text-slate-800"
+            x-text="$refs.rekening.options[$refs.rekening.selectedIndex]?.text || 'Pilih rekening detail'"
+        ></p>
+    </div>
+
+    <label class="block">
+        <span class="mb-2 block text-sm font-semibold text-slate-700">Anggaran (Rp)</span>
+        <input
+            type="number"
+            name="anggaran"
+            value="{{ old('anggaran', $pendapatan->anggaran ?? '') }}"
+            required
+            min="0"
+            step="0.01"
+            placeholder="0"
+            class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+        @error('anggaran')
+            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+        @enderror
+    </label>
+
+    <label class="block">
+        <span class="mb-2 block text-sm font-semibold text-slate-700">Status Publikasi</span>
+        <select
+            name="status_publikasi"
+            required
+            class="w-full rounded-xl border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+            <option value="draft" @selected(old('status_publikasi', $pendapatan->status_publikasi ?? 'draft') === 'draft')>
+                Draft
+            </option>
+            <option value="dipublikasikan" @selected(old('status_publikasi', $pendapatan->status_publikasi ?? '') === 'dipublikasikan')>
+                Dipublikasikan
+            </option>
+        </select>
+
+        @error('status_publikasi')
+            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+        @enderror
+    </label>
 </div>
-<div class="mt-7 flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-5"><a href="{{ route('admin.pendapatan.index') }}" class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">Batal</a><button class="rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"><i class='bx bx-save mr-1'></i> Simpan Pendapatan</button></div>
+
+<div class="mt-7 flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-5">
+    <a
+        href="{{ route('admin.pendapatan.index') }}"
+        class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+    >
+        Batal
+    </a>
+
+    <button
+        class="rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    >
+        <i class='bx bx-save mr-1'></i> Simpan Pendapatan
+    </button>
+</div>
