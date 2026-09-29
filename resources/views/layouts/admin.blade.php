@@ -851,6 +851,29 @@
 
 
             <a
+                href="{{ route('admin.pendapatan.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.pendapatan.*') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-trending-up'></i>
+
+                <span>
+                    Pendapatan
+                </span>
+
+            </a>
+
+            <a href="{{ route('admin.belanja.index') }}" class="admin-nav-link {{ request()->routeIs('admin.belanja.*') ? 'active' : '' }}"><i class='bx bx-receipt'></i><span>Belanja</span></a>
+            <a href="{{ route('admin.pembiayaan.index') }}" class="admin-nav-link {{ request()->routeIs('admin.pembiayaan.*') ? 'active' : '' }}"><i class='bx bx-transfer'></i><span>Pembiayaan</span></a>
+            <a href="{{ route('admin.realisasi.index') }}" class="admin-nav-link {{ request()->routeIs('admin.realisasi.*') ? 'active' : '' }}"><i class='bx bx-line-chart'></i><span>Realisasi</span></a>
+
+            <div class="admin-nav-label mt-5">Dokumen Publikasi</div>
+            <a href="{{ route('admin.dokumen.index') }}" class="admin-nav-link {{ request()->routeIs('admin.dokumen.*') ? 'active' : '' }}"><i class='bx bx-file'></i><span>Dokumen</span></a>
+
+            <div class="admin-nav-label mt-5">Pengaturan</div>
+
+
+            <a
                 href="{{ route('admin.profile') }}"
                 class="admin-nav-link {{ request()->routeIs('admin.profile*') ? 'active' : '' }}"
             >

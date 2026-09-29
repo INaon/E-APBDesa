@@ -657,6 +657,10 @@
 
             </a>
 
+            <a href="{{ route('pendapatan', $year->tahun) }}" class="{{ request()->routeIs('pendapatan') ? 'active' : '' }}"><i class='bx bx-trending-up'></i><span>Pendapatan</span></a>
+            <a href="{{ route('belanja', $year->tahun) }}" class="{{ request()->routeIs('belanja') ? 'active' : '' }}"><i class='bx bx-receipt'></i><span>Belanja</span></a>
+            <a href="{{ route('pembiayaan', $year->tahun) }}" class="{{ request()->routeIs('pembiayaan') ? 'active' : '' }}"><i class='bx bx-transfer'></i><span>Pembiayaan</span></a>
+
 
             {{-- REALISASI --}}
 
