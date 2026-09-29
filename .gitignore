@@ -3,3 +3,11 @@
 /.env
 /public/build
 /storage/*.key
+# Laravel runtime
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Bootstrap cache
+/bootstrap/cache/*
