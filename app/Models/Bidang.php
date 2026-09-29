@@ -1,1 +1,1 @@
-<?php namespace App\Models; use Illuminate\Database\Eloquent\Model; class Bidang extends Model {protected $table='bidang'; protected $guarded=[];}
+<?php namespace App\Models; use Illuminate\Database\Eloquent\Model; class Bidang extends Model {protected $table='bidang'; protected $guarded=[]; public function kegiatan(){return $this->hasMany(Kegiatan::class);} public function belanja(){return $this->hasMany(Belanja::class);}}

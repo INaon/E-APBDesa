@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\PendapatanController;
+use App\Http\Controllers\Admin\{BelanjaController,PembiayaanController,RealisasiController,DokumenController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,17 +18,12 @@ Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/apbdesa/{tahun}', [PublicController::class, 'apbdesa'])
     ->name('apbdesa');
 
-Route::get('/pendapatan/{tahun}', function ($tahun) {
-    return redirect()->route('apbdesa', $tahun);
-})->name('pendapatan');
+Route::get('/pendapatan/{tahun}', [PublicController::class, 'pendapatan'])
+    ->name('pendapatan');
 
-Route::get('/belanja/{tahun}', function ($tahun) {
-    return redirect()->route('apbdesa', $tahun);
-})->name('belanja');
+Route::get('/belanja/{tahun}', [PublicController::class, 'belanja'])->name('belanja');
 
-Route::get('/pembiayaan/{tahun}', function ($tahun) {
-    return redirect()->route('apbdesa', $tahun);
-})->name('pembiayaan');
+Route::get('/pembiayaan/{tahun}', [PublicController::class, 'pembiayaan'])->name('pembiayaan');
 
 Route::get('/realisasi/{tahun}', [PublicController::class, 'realisasi'])
     ->name('realisasi');
@@ -66,6 +63,27 @@ Route::middleware('auth')
 
         Route::patch('/tahun-anggaran/{year}/aktif', [SettingController::class, 'activate'])
             ->name('years.activate');
+
+        Route::resource('pendapatan', PendapatanController::class)
+            ->except('show');
+
+        Route::patch('/pendapatan/{pendapatan}/publikasi', [PendapatanController::class, 'togglePublication'])
+            ->name('pendapatan.publication');
+
+        Route::resource('belanja', BelanjaController::class)->except('show');
+        Route::post('belanja/bidang', [BelanjaController::class, 'storeBidang'])->name('belanja.bidang.store');
+        Route::post('belanja/kegiatan', [BelanjaController::class, 'storeKegiatan'])->name('belanja.kegiatan.store');
+        Route::patch('belanja/{belanja}/publikasi', [BelanjaController::class, 'publication'])->name('belanja.publication');
+
+        Route::resource('pembiayaan', PembiayaanController::class)->except('show');
+        Route::patch('pembiayaan/{pembiayaan}/publikasi', [PembiayaanController::class, 'publication'])->name('pembiayaan.publication');
+        Route::resource('dokumen', DokumenController::class)->except('show');
+        Route::patch('dokumen/{dokumen}/publikasi', [DokumenController::class, 'publication'])->name('dokumen.publication');
+        Route::get('realisasi', [RealisasiController::class, 'index'])->name('realisasi.index');
+        Route::get('realisasi/create', [RealisasiController::class, 'create'])->name('realisasi.create');
+        Route::post('realisasi', [RealisasiController::class, 'store'])->name('realisasi.store');
+        Route::delete('realisasi/{jenis}/{id}', [RealisasiController::class, 'destroy'])->name('realisasi.destroy');
+        Route::patch('realisasi/{jenis}/{id}/publikasi', [RealisasiController::class, 'publication'])->name('realisasi.publication');
     });
 
 
