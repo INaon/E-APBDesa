@@ -1,0 +1,3 @@
+<?php
+namespace App\Http\Controllers\Admin; use App\Http\Controllers\Controller; use App\Models\Desa; use Illuminate\Http\Request;
+class ProfileController extends Controller { public function edit(){return view('admin.profile.edit',['desa'=>Desa::firstOrCreate([],['nama'=>'Desa Sumber Jaya','kabupaten'=>'Tanah Laut','provinsi'=>'Kalimantan Selatan'])]);} public function update(Request $request){$data=$request->validate(['nama'=>'required|string|max:150','kecamatan'=>'nullable|string|max:100','kabupaten'=>'required|string|max:100','provinsi'=>'required|string|max:100','alamat'=>'nullable|string','website'=>'nullable|url|max:255','email'=>'nullable|email|max:255']); Desa::firstOrCreate()->update($data); return back()->with('success','Profil desa berhasil diperbarui.');} }
