@@ -1,0 +1,1 @@
+<?php namespace App\Models; use Illuminate\Database\Eloquent\Model; class RealisasiBelanja extends Model {protected $table='realisasi_belanja'; protected $guarded=[]; protected $casts=['nilai'=>'decimal:2','tanggal'=>'date'];}
