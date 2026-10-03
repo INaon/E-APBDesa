@@ -1,4 +1,240 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller; use App\Models\{DokumenPublikasi,TahunAnggaran}; use Illuminate\Http\{Request,RedirectResponse}; use Illuminate\Support\Facades\Storage; use Illuminate\View\View;
-class DokumenController extends Controller { public function index():View{return view('admin.dokumen.index',['items'=>DokumenPublikasi::with('tahunAnggaran')->latest()->paginate(12)]);} public function create():View{return view('admin.dokumen.form',['years'=>TahunAnggaran::orderByDesc('tahun')->get()]);} public function edit(DokumenPublikasi $dokumen):View{return view('admin.dokumen.form',['item'=>$dokumen,'years'=>TahunAnggaran::orderByDesc('tahun')->get()]);} public function store(Request $r):RedirectResponse{$d=$this->valid($r,true);$d['file_path']=$r->file('file')->store('dokumen-publikasi','public');DokumenPublikasi::create($d);return to_route('admin.dokumen.index')->with('success','Dokumen diunggah.');} public function update(Request $r,DokumenPublikasi $dokumen):RedirectResponse{$d=$this->valid($r,false);if($r->hasFile('file')){Storage::disk('public')->delete($dokumen->file_path);$d['file_path']=$r->file('file')->store('dokumen-publikasi','public');}$dokumen->update($d);return to_route('admin.dokumen.index')->with('success','Dokumen diperbarui.');} public function destroy(DokumenPublikasi $dokumen):RedirectResponse{Storage::disk('public')->delete($dokumen->file_path);$dokumen->delete();return back()->with('success','Dokumen dihapus.');} public function publication(DokumenPublikasi $dokumen):RedirectResponse{$new=$dokumen->status_publikasi==='dipublikasikan'?'draft':'dipublikasikan';$dokumen->update(['status_publikasi'=>$new,'tanggal_publikasi'=>$new==='dipublikasikan'?now():null]);return back()->with('success','Status publikasi diperbarui.');} private function valid(Request $r,bool $required):array{return $r->validate(['tahun_anggaran_id'=>'required|exists:tahun_anggaran,id','kategori'=>'required|max:100','judul'=>'required|max:255','deskripsi'=>'nullable|string','file'=>[$required?'required':'nullable','file','mimes:pdf','max:10240'],'status_publikasi'=>'required|in:draft,dipublikasikan','tanggal_publikasi'=>'nullable|date']);}}
+
+use App\Http\Controllers\Controller;
+use App\Models\DokumenPublikasi;
+use App\Models\TahunAnggaran;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+
+class DokumenController extends Controller
+{
+    /**
+     * Menampilkan daftar dokumen.
+     */
+    public function index(): View
+    {
+        $items = DokumenPublikasi::with('tahunAnggaran')
+            ->latest()
+            ->paginate(12);
+
+        return view('admin.dokumen.index', [
+            'items' => $items,
+        ]);
+    }
+
+    /**
+     * Form tambah dokumen.
+     */
+    public function create(): View
+    {
+        $years = TahunAnggaran::query()
+            ->orderByDesc('tahun')
+            ->get();
+
+        return view('admin.dokumen.form', [
+            'years' => $years,
+        ]);
+    }
+
+    /**
+     * Simpan dokumen baru.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $this->validateData($request, true);
+
+        if ($request->hasFile('file')) {
+            $data['file_path'] = $request
+                ->file('file')
+                ->store('dokumen-publikasi', 'public');
+        }
+
+        DokumenPublikasi::create($data);
+
+        return to_route('admin.dokumen.index')
+            ->with('success', 'Dokumen berhasil diunggah.');
+    }
+
+    /**
+     * Form edit dokumen.
+     */
+    public function edit(
+        DokumenPublikasi $dokumen
+    ): View {
+        $years = TahunAnggaran::query()
+            ->orderByDesc('tahun')
+            ->get();
+
+        return view('admin.dokumen.form', [
+            'item' => $dokumen,
+            'years' => $years,
+        ]);
+    }
+
+    /**
+     * Update dokumen.
+     */
+    public function update(
+        Request $request,
+        DokumenPublikasi $dokumen
+    ): RedirectResponse {
+        $data = $this->validateData($request, false);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Jika upload file baru
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('file')) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Hapus file lama jika file_path tersedia
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                !empty($dokumen->file_path)
+            ) {
+                Storage::disk('public')
+                    ->delete($dokumen->file_path);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Simpan file baru
+            |--------------------------------------------------------------------------
+            */
+
+            $data['file_path'] = $request
+                ->file('file')
+                ->store('dokumen-publikasi', 'public');
+        }
+
+        $dokumen->update($data);
+
+        return to_route('admin.dokumen.index')
+            ->with('success', 'Dokumen berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus dokumen.
+     */
+    public function destroy(
+        DokumenPublikasi $dokumen
+    ): RedirectResponse {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hapus file PDF jika ada
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            !empty($dokumen->file_path)
+        ) {
+            Storage::disk('public')
+                ->delete($dokumen->file_path);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Hapus data dari database
+        |--------------------------------------------------------------------------
+        */
+
+        $dokumen->delete();
+
+        return to_route('admin.dokumen.index')
+            ->with(
+                'success',
+                'Dokumen berhasil dihapus.'
+            );
+    }
+
+    /**
+     * Ubah status publikasi.
+     */
+    public function publication(
+        DokumenPublikasi $dokumen
+    ): RedirectResponse {
+
+        $newStatus =
+            $dokumen->status_publikasi === 'dipublikasikan'
+                ? 'draft'
+                : 'dipublikasikan';
+
+        $dokumen->update([
+            'status_publikasi' => $newStatus,
+            'tanggal_publikasi' =>
+                $newStatus === 'dipublikasikan'
+                    ? now()
+                    : null,
+        ]);
+
+        return back()
+            ->with(
+                'success',
+                'Status publikasi dokumen berhasil diperbarui.'
+            );
+    }
+
+    /**
+     * Validasi data dokumen.
+     */
+    private function validateData(
+        Request $request,
+        bool $required
+    ): array {
+        return $request->validate([
+
+            'tahun_anggaran_id' => [
+                'required',
+                'exists:tahun_anggaran,id',
+            ],
+
+            'kategori' => [
+                'required',
+                'string',
+                'max:100',
+            ],
+
+            'judul' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'deskripsi' => [
+                'nullable',
+                'string',
+            ],
+
+            'file' => [
+                $required
+                    ? 'required'
+                    : 'nullable',
+
+                'file',
+                'mimes:pdf',
+                'max:10240',
+            ],
+
+            'status_publikasi' => [
+                'required',
+                'in:draft,dipublikasikan',
+            ],
+
+            'tanggal_publikasi' => [
+                'nullable',
+                'date',
+            ],
+
+        ]);
+    }
+}

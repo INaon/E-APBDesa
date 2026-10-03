@@ -309,13 +309,13 @@
 
 
                                         {{-- EDIT --}}
-                                        <a
-                                            href="{{ route('admin.dokumen.edit', $item) }}"
-                                            title="Edit"
-                                            class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-600"
-                                        >
-                                            <i class="bx bx-edit text-lg"></i>
-                                        </a>
+<a
+    href="{{ route('admin.dokumen.edit', ['dokumen' => $item->id]) }}"
+    title="Edit"
+    class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-600"
+>
+    <i class="bx bx-edit text-lg"></i>
+</a>
 
 
                                         {{-- PUBLIKASI / JADIKAN DRAFT --}}
@@ -351,7 +351,7 @@
                                         {{-- HAPUS --}}
                                         <form
                                             method="POST"
-                                            action="{{ route('admin.dokumen.destroy', $item) }}"
+                                            action="{{ route('admin.dokumen.destroy', ['dokumen' => $item->id]) }}"
                                             onsubmit="return confirm('Hapus dokumen ini?')"
                                         >
 

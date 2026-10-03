@@ -240,9 +240,12 @@ Route::middleware('auth')
         */
 
         Route::resource(
-            'dokumen',
-            DokumenController::class
-        )->except('show');
+    'dokumen',
+    DokumenController::class
+)->except('show')
+    ->parameters([
+        'dokumen' => 'dokumen',
+    ]);
 
 
         Route::patch(

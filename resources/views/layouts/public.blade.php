@@ -10,7 +10,6 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-
     {{-- =====================================================
          DATA PROFIL DESA
     ====================================================== --}}
@@ -97,6 +96,7 @@
 
 
         html {
+
             width: 100%;
             max-width: 100%;
 
@@ -110,6 +110,7 @@
 
 
         body {
+
             width: 100%;
             max-width: 100%;
 
@@ -177,10 +178,6 @@
 
             z-index: 1000;
 
-            /*
-             * Tetap visible karena dropdown menu mobile
-             * berada di bawah header.
-             */
             overflow: visible;
         }
 
@@ -213,6 +210,7 @@
 
 
         .eapb-header:hover::before {
+
             left: 100%;
         }
 
@@ -358,7 +356,10 @@
             border-radius: 10px;
 
             transition:
-                .3s;
+                background .25s ease,
+                color .25s ease,
+                box-shadow .25s ease,
+                transform .25s ease;
         }
 
 
@@ -371,12 +372,13 @@
         }
 
 
+        /* =====================================================
+           MENU AKTIF - DEFAULT
+        ===================================================== */
+
         .eapb-navbar a.active {
 
             color: white;
-
-            background:
-                rgba(255,255,255,.15);
         }
 
 
@@ -396,7 +398,181 @@
             border-radius: 99px;
 
             background:
+                rgba(255,255,255,.85);
+        }
+
+
+        /* =====================================================
+           BERANDA - BIRU
+        ===================================================== */
+
+        .eapb-navbar a.menu-home.active {
+
+            background:
+                rgba(37, 99, 235, .55);
+
+            box-shadow:
+                0 4px 14px rgba(37, 99, 235, .18);
+        }
+
+
+        .eapb-navbar a.menu-home.active::after {
+
+            background:
                 #60a5fa;
+        }
+
+
+        /* =====================================================
+           APBDESA - BLUE
+        ===================================================== */
+
+        .eapb-navbar a.menu-apbdesa.active {
+
+            background:
+                rgba(30, 64, 175, .58);
+
+            box-shadow:
+                0 4px 14px rgba(30, 64, 175, .20);
+        }
+
+
+        .eapb-navbar a.menu-apbdesa.active::after {
+
+            background:
+                #93c5fd;
+        }
+
+
+        /* =====================================================
+           PENDAPATAN - HIJAU
+        ===================================================== */
+
+        .eapb-navbar a.menu-pendapatan.active {
+
+            background:
+                rgba(22, 101, 52, .58);
+
+            box-shadow:
+                0 4px 14px rgba(22, 101, 52, .20);
+        }
+
+
+        .eapb-navbar a.menu-pendapatan.active::after {
+
+            background:
+                #86efac;
+        }
+
+
+        /* =====================================================
+           BELANJA - DARK / HITAM
+        ===================================================== */
+
+        .eapb-navbar a.menu-belanja.active {
+
+            background:
+                rgba(15, 23, 42, .90);
+
+            color:
+                #ffffff;
+
+            box-shadow:
+                0 5px 16px rgba(0, 0, 0, .28);
+
+            border:
+                1px solid rgba(255,255,255,.10);
+        }
+
+
+        .eapb-navbar a.menu-belanja.active::after {
+
+            background:
+                #cbd5e1;
+        }
+
+
+        /* =====================================================
+           PEMBIAYAAN - UNGU
+        ===================================================== */
+
+        .eapb-navbar a.menu-pembiayaan.active {
+
+            background:
+                rgba(109, 40, 217, .58);
+
+            box-shadow:
+                0 4px 14px rgba(109, 40, 217, .20);
+        }
+
+
+        .eapb-navbar a.menu-pembiayaan.active::after {
+
+            background:
+                #c4b5fd;
+        }
+
+
+        /* =====================================================
+           REALISASI - CYAN
+        ===================================================== */
+
+        .eapb-navbar a.menu-realisasi.active {
+
+            background:
+                rgba(14, 116, 144, .58);
+
+            box-shadow:
+                0 4px 14px rgba(14, 116, 144, .20);
+        }
+
+
+        .eapb-navbar a.menu-realisasi.active::after {
+
+            background:
+                #67e8f9;
+        }
+
+
+        /* =====================================================
+           DOKUMEN - ORANGE
+        ===================================================== */
+
+        .eapb-navbar a.menu-dokumen.active {
+
+            background:
+                rgba(154, 52, 18, .58);
+
+            box-shadow:
+                0 4px 14px rgba(154, 52, 18, .20);
+        }
+
+
+        .eapb-navbar a.menu-dokumen.active::after {
+
+            background:
+                #fdba74;
+        }
+
+
+        /* =====================================================
+           PROFIL DESA - TEAL
+        ===================================================== */
+
+        .eapb-navbar a.menu-profil.active {
+
+            background:
+                rgba(15, 118, 110, .58);
+
+            box-shadow:
+                0 4px 14px rgba(15, 118, 110, .20);
+        }
+
+
+        .eapb-navbar a.menu-profil.active::after {
+
+            background:
+                #5eead4;
         }
 
 
@@ -484,22 +660,19 @@
             max-width: 100%;
 
             min-width: 0;
+
             min-height: 100vh;
 
-            padding-top: 92px;
-
             /*
-             * Penting untuk halaman APBDesa,
-             * Pendapatan, Belanja, Pembiayaan dan Realisasi.
+             * Navbar fixed memiliki tinggi sekitar 75-90px.
+             * Tambahan ruang diberikan agar hero tidak mepet.
              */
+
+            padding-top: 120px;
+
             overflow-x: hidden;
         }
 
-
-        /*
-         * Semua direct child content tidak boleh
-         * memaksa viewport menjadi lebih lebar.
-         */
 
         .eapb-content > * {
 
@@ -626,6 +799,7 @@
             body {
 
                 width: 100% !important;
+
                 max-width: 100% !important;
 
                 overflow-x: hidden !important;
@@ -635,6 +809,7 @@
             .eapb-header {
 
                 width: 100% !important;
+
                 max-width: 100% !important;
 
                 padding:
@@ -643,9 +818,6 @@
                 min-height:
                     68px;
 
-                /*
-                 * WAJIB visible agar dropdown tidak terpotong.
-                 */
                 overflow:
                     visible;
             }
@@ -664,6 +836,10 @@
                     flex;
             }
 
+
+            /* =================================================
+               MOBILE NAVBAR
+            ================================================= */
 
             .eapb-navbar {
 
@@ -762,17 +938,70 @@
             }
 
 
-            .eapb-navbar a.active {
-
-                background:
-                    rgba(255,255,255,.15);
-            }
-
-
             .eapb-navbar a.active::after {
 
                 display:
                     none;
+            }
+
+
+            /* =================================================
+               WARNA MENU AKTIF MOBILE
+            ================================================= */
+
+            .eapb-navbar a.menu-home.active {
+
+                background:
+                    rgba(37, 99, 235, .65);
+            }
+
+
+            .eapb-navbar a.menu-apbdesa.active {
+
+                background:
+                    rgba(30, 64, 175, .65);
+            }
+
+
+            .eapb-navbar a.menu-pendapatan.active {
+
+                background:
+                    rgba(22, 101, 52, .65);
+            }
+
+
+            .eapb-navbar a.menu-belanja.active {
+
+                background:
+                    rgba(15, 23, 42, .96);
+            }
+
+
+            .eapb-navbar a.menu-pembiayaan.active {
+
+                background:
+                    rgba(109, 40, 217, .65);
+            }
+
+
+            .eapb-navbar a.menu-realisasi.active {
+
+                background:
+                    rgba(14, 116, 144, .65);
+            }
+
+
+            .eapb-navbar a.menu-dokumen.active {
+
+                background:
+                    rgba(154, 52, 18, .65);
+            }
+
+
+            .eapb-navbar a.menu-profil.active {
+
+                background:
+                    rgba(15, 118, 110, .65);
             }
 
 
@@ -809,7 +1038,7 @@
                     0 !important;
 
                 padding-top:
-                    82px;
+                    92px;
 
                 overflow-x:
                     hidden !important;
@@ -925,7 +1154,7 @@
             .eapb-content {
 
                 padding-top:
-                    78px;
+                    88px;
             }
 
         }
@@ -938,10 +1167,14 @@
         @media (prefers-reduced-motion: reduce) {
 
             html {
-                scroll-behavior: auto;
+
+                scroll-behavior:
+                    auto;
             }
 
+
             * {
+
                 transition:
                     none !important;
             }
@@ -1023,11 +1256,13 @@
         >
 
 
-            {{-- BERANDA --}}
+            {{-- =================================================
+                 BERANDA
+            ================================================== --}}
 
             <a
                 href="{{ route('home') }}"
-                class="{{ request()->routeIs('home') ? 'active' : '' }}"
+                class="menu-home {{ request()->routeIs('home') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-home-alt'></i>
@@ -1039,11 +1274,13 @@
             </a>
 
 
-            {{-- APBDESA --}}
+            {{-- =================================================
+                 APBDESA
+            ================================================== --}}
 
             <a
                 href="{{ route('apbdesa', $year->tahun) }}"
-                class="{{ request()->routeIs('apbdesa') ? 'active' : '' }}"
+                class="menu-apbdesa {{ request()->routeIs('apbdesa') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-wallet'></i>
@@ -1055,11 +1292,13 @@
             </a>
 
 
-            {{-- PENDAPATAN --}}
+            {{-- =================================================
+                 PENDAPATAN
+            ================================================== --}}
 
             <a
                 href="{{ route('pendapatan', $year->tahun) }}"
-                class="{{ request()->routeIs('pendapatan') ? 'active' : '' }}"
+                class="menu-pendapatan {{ request()->routeIs('pendapatan') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-trending-up'></i>
@@ -1071,11 +1310,13 @@
             </a>
 
 
-            {{-- BELANJA --}}
+            {{-- =================================================
+                 BELANJA
+            ================================================== --}}
 
             <a
                 href="{{ route('belanja', $year->tahun) }}"
-                class="{{ request()->routeIs('belanja') ? 'active' : '' }}"
+                class="menu-belanja {{ request()->routeIs('belanja') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-receipt'></i>
@@ -1087,11 +1328,13 @@
             </a>
 
 
-            {{-- PEMBIAYAAN --}}
+            {{-- =================================================
+                 PEMBIAYAAN
+            ================================================== --}}
 
             <a
                 href="{{ route('pembiayaan', $year->tahun) }}"
-                class="{{ request()->routeIs('pembiayaan') ? 'active' : '' }}"
+                class="menu-pembiayaan {{ request()->routeIs('pembiayaan') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-transfer'></i>
@@ -1103,11 +1346,13 @@
             </a>
 
 
-            {{-- REALISASI --}}
+            {{-- =================================================
+                 REALISASI
+            ================================================== --}}
 
             <a
                 href="{{ route('realisasi', $year->tahun) }}"
-                class="{{ request()->routeIs('realisasi') ? 'active' : '' }}"
+                class="menu-realisasi {{ request()->routeIs('realisasi') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-line-chart'></i>
@@ -1119,11 +1364,13 @@
             </a>
 
 
-            {{-- DOKUMEN --}}
+            {{-- =================================================
+                 DOKUMEN
+            ================================================== --}}
 
             <a
                 href="{{ route('dokumen', $year->tahun) }}"
-                class="{{ request()->routeIs('dokumen') ? 'active' : '' }}"
+                class="menu-dokumen {{ request()->routeIs('dokumen') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-file'></i>
@@ -1135,11 +1382,13 @@
             </a>
 
 
-            {{-- PROFIL DESA --}}
+            {{-- =================================================
+                 PROFIL DESA
+            ================================================== --}}
 
             <a
                 href="{{ route('profil') }}"
-                class="{{ request()->routeIs('profil') ? 'active' : '' }}"
+                class="menu-profil {{ request()->routeIs('profil') ? 'active' : '' }}"
             >
 
                 <i class='bx bx-buildings'></i>
@@ -1152,40 +1401,21 @@
 
 
             {{-- =================================================
-                 LOGIN / ADMIN
+                 ADMIN
             ================================================== --}}
 
-            @auth
+            <a
+                href="{{ auth()->check() ? route('admin.dashboard') : route('login') }}"
+                class="eapb-login"
+            >
 
-                <a
-                    href="{{ route('admin.dashboard') }}"
-                    class="eapb-login"
-                >
+                <i class='bx bx-user'></i>
 
-                    <i class='bx bx-dashboard'></i>
+                <span>
+                    Admin
+                </span>
 
-                    <span>
-                        Admin
-                    </span>
-
-                </a>
-
-            @else
-
-                <a
-                    href="{{ route('login') }}"
-                    class="eapb-login"
-                >
-
-                    <i class='bx bx-log-in'></i>
-
-                    <span>
-                        Login Admin
-                    </span>
-
-                </a>
-
-            @endauth
+            </a>
 
 
         </nav>
@@ -1210,11 +1440,12 @@
 
     <footer class="eapb-footer">
 
-
         <div class="eapb-footer-inner">
 
 
-            {{-- INFORMASI APLIKASI --}}
+            {{-- =================================================
+                 INFORMASI APLIKASI
+            ================================================== --}}
 
             <div>
 
@@ -1278,7 +1509,6 @@
 
             </div>
 
-
         </div>
 
 
@@ -1296,7 +1526,6 @@
             untuk masyarakat.
 
         </div>
-
 
     </footer>
 
@@ -1319,43 +1548,42 @@
 
 
                 if (!menuIcon || !navbar) {
+
                     return;
+
                 }
 
 
                 /* =================================================
-                   BUKA / TUTUP MENU
+                   BUKA MENU
                 ================================================== */
 
-                function toggleMenu() {
+                function openMenu() {
 
-                    const isOpen =
-                        navbar.classList.toggle('active');
-
-
-                    menuIcon.classList.toggle(
-                        'bx-menu',
-                        !isOpen
+                    navbar.classList.add(
+                        'active'
                     );
 
 
-                    menuIcon.classList.toggle(
-                        'bx-x',
-                        isOpen
+                    menuIcon.classList.remove(
+                        'bx-menu'
+                    );
+
+
+                    menuIcon.classList.add(
+                        'bx-x'
                     );
 
 
                     menuIcon.setAttribute(
                         'aria-expanded',
-                        isOpen ? 'true' : 'false'
+                        'true'
                     );
 
 
                     menuIcon.setAttribute(
                         'aria-label',
-                        isOpen
-                            ? 'Tutup menu'
-                            : 'Buka menu'
+                        'Tutup menu'
                     );
 
                 }
@@ -1367,13 +1595,19 @@
 
                 function closeMenu() {
 
-                    navbar.classList.remove('active');
+                    navbar.classList.remove(
+                        'active'
+                    );
 
 
-                    menuIcon.classList.remove('bx-x');
+                    menuIcon.classList.remove(
+                        'bx-x'
+                    );
 
 
-                    menuIcon.classList.add('bx-menu');
+                    menuIcon.classList.add(
+                        'bx-menu'
+                    );
 
 
                     menuIcon.setAttribute(
@@ -1391,7 +1625,28 @@
 
 
                 /* =================================================
-                   KLIK TOMBOL MENU
+                   TOGGLE MENU
+                ================================================== */
+
+                function toggleMenu() {
+
+                    if (
+                        navbar.classList.contains('active')
+                    ) {
+
+                        closeMenu();
+
+                    } else {
+
+                        openMenu();
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   TOMBOL MENU MOBILE
                 ================================================== */
 
                 menuIcon.addEventListener(
@@ -1423,32 +1678,14 @@
 
                             event.preventDefault();
 
+                            event.stopPropagation();
+
                             toggleMenu();
 
                         }
 
                     }
                 );
-
-
-                /* =================================================
-                   KLIK LINK MENU
-                ================================================== */
-
-                navbar
-                    .querySelectorAll('a')
-                    .forEach(function (link) {
-
-                        link.addEventListener(
-                            'click',
-                            function () {
-
-                                closeMenu();
-
-                            }
-                        );
-
-                    });
 
 
                 /* =================================================
@@ -1460,6 +1697,7 @@
                     function (event) {
 
                         if (
+                            navbar.classList.contains('active') &&
                             !navbar.contains(event.target) &&
                             !menuIcon.contains(event.target)
                         ) {
@@ -1480,7 +1718,9 @@
                     'resize',
                     function () {
 
-                        if (window.innerWidth > 768) {
+                        if (
+                            window.innerWidth > 768
+                        ) {
 
                             closeMenu();
 
