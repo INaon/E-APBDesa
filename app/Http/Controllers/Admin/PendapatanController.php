@@ -20,7 +20,6 @@ class PendapatanController extends Controller
             'pendapatan' => Pendapatan::query()
                 ->with(['tahunAnggaran', 'pendapatanRekening'])
                 ->orderByDesc('tahun_anggaran_id')
-                ->orderBy('urutan')
                 ->orderBy('kode')
                 ->paginate(12),
         ]);
@@ -46,9 +45,13 @@ class PendapatanController extends Controller
         ]));
     }
 
-    public function update(Request $request, Pendapatan $pendapatan): RedirectResponse
-    {
-        $pendapatan->update($this->validated($request, $pendapatan));
+    public function update(
+        Request $request,
+        Pendapatan $pendapatan
+    ): RedirectResponse {
+        $pendapatan->update(
+            $this->validated($request, $pendapatan)
+        );
 
         return to_route('admin.pendapatan.index')
             ->with('success', 'Data pendapatan berhasil diperbarui.');
@@ -62,8 +65,9 @@ class PendapatanController extends Controller
             ->with('success', 'Data pendapatan berhasil dihapus.');
     }
 
-    public function togglePublication(Pendapatan $pendapatan): RedirectResponse
-    {
+    public function togglePublication(
+        Pendapatan $pendapatan
+    ): RedirectResponse {
         $published = $pendapatan->status_publikasi === 'dipublikasikan';
 
         $pendapatan->update([
@@ -130,12 +134,6 @@ class PendapatanController extends Controller
                 'min:0',
             ],
 
-            'urutan' => [
-                'nullable',
-                'integer',
-                'min:0',
-            ],
-
             'status_publikasi' => [
                 'required',
                 'in:draft,dipublikasikan',
@@ -156,9 +154,10 @@ class PendapatanController extends Controller
         $data['kode'] = $rekening->kode;
         $data['uraian'] = $rekening->uraian;
 
-        $data['kelompok'] = match (
-            explode('.', $rekening->kode)[1] ?? null
-        ) {
+        $kodeParts = explode('.', $rekening->kode);
+        $kelompokKode = $kodeParts[1] ?? null;
+
+        $data['kelompok'] = match ($kelompokKode) {
             '1' => 'Pendapatan Asli Desa',
             '2' => 'Pendapatan Transfer',
             '3' => 'Pendapatan Lain-lain',

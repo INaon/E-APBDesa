@@ -1,0 +1,12 @@
+// Tambahkan import controller di bagian atas routes/web.php:
+use App\Http\Controllers\Admin\BelanjaImportController;
+
+// Tambahkan DI DALAM group admin:
+Route::get('belanja/import', [BelanjaImportController::class, 'form'])
+    ->name('belanja.import.form');
+
+Route::post('belanja/import', [BelanjaImportController::class, 'import'])
+    ->name('belanja.import');
+
+Route::get('belanja/template', [BelanjaImportController::class, 'template'])
+    ->name('belanja.template');

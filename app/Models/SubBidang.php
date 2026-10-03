@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kegiatan extends Model
+class SubBidang extends Model
 {
-    protected $table = 'kegiatan';
+    protected $table = 'sub_bidang';
 
     protected $guarded = [];
 
@@ -15,9 +15,9 @@ class Kegiatan extends Model
         return $this->belongsTo(Bidang::class);
     }
 
-    public function subBidang()
+    public function kegiatan()
     {
-        return $this->belongsTo(SubBidang::class);
+        return $this->hasMany(Kegiatan::class);
     }
 
     public function belanja()

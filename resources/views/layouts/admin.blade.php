@@ -1,3 +1,7 @@
+@php
+    $desa = $desa ?? \App\Models\Desa::first();
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -13,7 +17,7 @@
 
     <meta
         name="description"
-        content="Panel Administrasi e-APBDesa Desa Sumber Jaya"
+        content="Panel Administrasi e-APBDesa Desa {{ $desa?->nama ?? 'Desa' }}"
     >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,13 +50,14 @@
             box-sizing: border-box;
         }
 
+
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
             margin: 0;
-
             min-height: 100vh;
 
             font-family: "Poppins", sans-serif;
@@ -65,18 +70,17 @@
 
         /* =====================================================
            APP
-        ===================================================== */
+        ====================================================== */
 
         .admin-app {
             min-height: 100vh;
-
             display: flex;
         }
 
 
         /* =====================================================
            SIDEBAR
-        ===================================================== */
+        ====================================================== */
 
         .admin-sidebar {
 
@@ -89,7 +93,6 @@
             width: 280px;
 
             display: flex;
-
             flex-direction: column;
 
             background:
@@ -110,14 +113,15 @@
         }
 
 
-        /* LOGO */
+        /* =====================================================
+           LOGO
+        ====================================================== */
 
         .admin-brand {
 
             height: 82px;
 
             display: flex;
-
             align-items: center;
 
             gap: 12px;
@@ -131,34 +135,60 @@
 
         .admin-brand-icon {
 
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
 
             display: flex;
-
             align-items: center;
             justify-content: center;
 
-            border-radius: 13px;
+            flex-shrink: 0;
+
+            border-radius: 14px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #3b82f6
+                    #2563eb 0%,
+                    #3b82f6 100%
                 );
 
+            border:
+                1px solid rgba(255,255,255,.18);
+
             box-shadow:
-                0 8px 20px rgba(37,99,235,.3);
+                0 8px 20px rgba(37,99,235,.30);
+
+            overflow: hidden;
+        }
+
+
+        .admin-brand-icon img {
+
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            padding: 5px;
+        }
+
+
+        .admin-brand-icon i {
 
             font-size: 23px;
+
+            color: white;
         }
 
 
         .admin-brand-text {
 
-            display: flex;
+            min-width: 0;
 
+            display: flex;
             flex-direction: column;
 
             line-height: 1.15;
@@ -170,6 +200,10 @@
             font-size: 18px;
 
             font-weight: 700;
+
+            color: white;
+
+            white-space: nowrap;
         }
 
 
@@ -185,65 +219,20 @@
             text-transform: uppercase;
 
             letter-spacing: 1px;
+
+            white-space: nowrap;
         }
 
 
-        /* DESA INFO */
-
-        .admin-village {
-
-            padding: 24px;
-
-            border-bottom:
-                1px solid rgba(255,255,255,.08);
-        }
-
-
-        .admin-village-label {
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: 10px;
-
-            font-weight: 600;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1.2px;
-        }
-
-
-        .admin-village-name {
-
-            margin-top: 7px;
-
-            color: white;
-
-            font-size: 14px;
-
-            font-weight: 600;
-        }
-
-
-        .admin-village-desc {
-
-            margin-top: 4px;
-
-            color:
-                rgba(255,255,255,.45);
-
-            font-size: 11px;
-        }
-
-
-        /* MENU */
+        /* =====================================================
+           MENU
+        ====================================================== */
 
         .admin-nav {
 
             flex: 1;
 
-            padding: 22px 16px;
+            padding: 24px 16px;
 
             overflow-y: auto;
         }
@@ -368,104 +357,9 @@
         }
 
 
-        /* SIDEBAR BOTTOM */
-
-        .admin-sidebar-bottom {
-
-            padding: 16px;
-
-            border-top:
-                1px solid rgba(255,255,255,.08);
-        }
-
-
-        .admin-user-card {
-
-            padding: 14px;
-
-            border-radius: 14px;
-
-            background:
-                rgba(255,255,255,.05);
-
-            border:
-                1px solid rgba(255,255,255,.06);
-        }
-
-
-        .admin-user-name {
-
-            color: white;
-
-            font-size: 12px;
-
-            font-weight: 600;
-        }
-
-
-        .admin-user-email {
-
-            margin-top: 3px;
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: 10px;
-
-            white-space: nowrap;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-        }
-
-
-        .admin-logout {
-
-            width: 100%;
-
-            margin-top: 10px;
-
-            padding: 10px 12px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            border: 0;
-
-            border-radius: 11px;
-
-            color:
-                rgba(255,255,255,.65);
-
-            background:
-                rgba(255,255,255,.04);
-
-            font-family: inherit;
-
-            font-size: 12px;
-
-            cursor: pointer;
-
-            transition: .25s;
-        }
-
-
-        .admin-logout:hover {
-
-            color: white;
-
-            background:
-                rgba(239,68,68,.16);
-        }
-
-
         /* =====================================================
            MAIN
-        ===================================================== */
+        ====================================================== */
 
         .admin-main {
 
@@ -479,7 +373,7 @@
 
         /* =====================================================
            TOPBAR
-        ===================================================== */
+        ====================================================== */
 
         .admin-topbar {
 
@@ -501,6 +395,7 @@
                 rgba(255,255,255,.88);
 
             backdrop-filter: blur(16px);
+
             -webkit-backdrop-filter: blur(16px);
 
             border-bottom:
@@ -570,6 +465,24 @@
         }
 
 
+        /* =====================================================
+           TOPBAR RIGHT
+        ====================================================== */
+
+        .admin-topbar-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        /* =====================================================
+           PUBLIC LINK
+        ====================================================== */
+
         .admin-public-link {
 
             display: inline-flex;
@@ -609,8 +522,312 @@
 
 
         /* =====================================================
+           ADMIN ACCOUNT
+        ====================================================== */
+
+        .admin-account {
+
+            position: relative;
+        }
+
+
+        .admin-account-button {
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 4px 10px 4px 5px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            background: white;
+
+            color: #334155;
+
+            font-family: inherit;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .admin-account-button:hover {
+
+            border-color: #cbd5e1;
+
+            background: #f8fafc;
+        }
+
+
+        .admin-account-avatar {
+
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #3b82f6
+                );
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .admin-account-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+            line-height: 1.15;
+        }
+
+
+        .admin-account-name {
+
+            max-width: 130px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            color: #0f172a;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .admin-account-role {
+
+            margin-top: 3px;
+
+            color: #94a3b8;
+
+            font-size: 9px;
+        }
+
+
+        .admin-account-chevron {
+
+            margin-left: 2px;
+
+            color: #94a3b8;
+
+            font-size: 16px;
+
+            transition: .25s;
+        }
+
+
+        .admin-account.open .admin-account-chevron {
+
+            transform: rotate(180deg);
+        }
+
+
+        /* =====================================================
+           ACCOUNT DROPDOWN
+        ====================================================== */
+
+        .admin-account-menu {
+
+            position: absolute;
+
+            top: calc(100% + 10px);
+
+            right: 0;
+
+            width: 245px;
+
+            padding: 8px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 20px 45px rgba(15,23,42,.14);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform:
+                translateY(-6px);
+
+            transition:
+                opacity .2s,
+                transform .2s,
+                visibility .2s;
+
+            z-index: 500;
+        }
+
+
+        .admin-account.open .admin-account-menu {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform: translateY(0);
+        }
+
+
+        .admin-account-header {
+
+            padding: 12px;
+
+            border-radius: 11px;
+
+            background: #f8fafc;
+        }
+
+
+        .admin-account-header-name {
+
+            color: #0f172a;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .admin-account-header-email {
+
+            margin-top: 3px;
+
+            color: #94a3b8;
+
+            font-size: 10px;
+
+            word-break: break-word;
+        }
+
+
+        .admin-account-menu-divider {
+
+            height: 1px;
+
+            margin: 7px 0;
+
+            background: #e2e8f0;
+        }
+
+
+        .admin-account-menu-link {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 10px 11px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #475569;
+
+            text-decoration: none;
+
+            font-family: inherit;
+
+            font-size: 11px;
+
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+            text-align: left;
+        }
+
+
+        .admin-account-menu-link i {
+
+            width: 28px;
+            height: 28px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background: #f1f5f9;
+
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+
+        .admin-account-menu-link:hover {
+
+            background: #f8fafc;
+
+            color: #0f172a;
+        }
+
+
+        .admin-account-menu-link.logout:hover {
+
+            background: #fef2f2;
+
+            color: #dc2626;
+        }
+
+
+        .admin-account-menu-link.logout:hover i {
+
+            background: #fee2e2;
+
+            color: #dc2626;
+        }
+
+
+        /* =====================================================
            CONTENT
-        ===================================================== */
+        ====================================================== */
 
         .admin-content {
 
@@ -618,7 +835,9 @@
         }
 
 
-        /* FLASH */
+        /* =====================================================
+           FLASH
+        ====================================================== */
 
         .admin-alert {
 
@@ -645,8 +864,8 @@
 
 
         /* =====================================================
-           MOBILE
-        ===================================================== */
+           MOBILE OVERLAY
+        ====================================================== */
 
         .admin-overlay {
 
@@ -662,6 +881,10 @@
             z-index: 900;
         }
 
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
 
         @media (max-width: 900px) {
 
@@ -710,8 +933,24 @@
                 padding: 24px 18px;
             }
 
+
+            .admin-account-info {
+
+                display: none;
+            }
+
+
+            .admin-account-button {
+
+                padding-right: 6px;
+            }
+
         }
 
+
+        /* =====================================================
+           MOBILE SMALL
+        ====================================================== */
 
         @media (max-width: 500px) {
 
@@ -743,6 +982,51 @@
                 justify-content: center;
             }
 
+
+            .admin-brand {
+
+                padding: 0 18px;
+            }
+
+
+            .admin-brand-icon {
+
+                width: 44px;
+                height: 44px;
+            }
+
+
+            .admin-brand-title {
+
+                font-size: 16px;
+            }
+
+
+            .admin-brand-subtitle {
+
+                font-size: 9px;
+            }
+
+
+            .admin-topbar-right {
+
+                gap: 6px;
+            }
+
+
+            .admin-account-menu {
+
+                position: fixed;
+
+                top: 65px;
+
+                right: 12px;
+
+                left: 12px;
+
+                width: auto;
+            }
+
         }
 
     </style>
@@ -751,7 +1035,6 @@
 
 
 <body>
-
 
 <div class="admin-app">
 
@@ -772,7 +1055,18 @@
 
             <div class="admin-brand-icon">
 
-                <i class='bx bx-bar-chart-alt-2'></i>
+                @if($desa?->logo)
+
+                    <img
+                        src="{{ asset('storage/' . $desa->logo) }}"
+                        alt="Logo {{ $desa->nama ?? 'Desa' }}"
+                    >
+
+                @else
+
+                    <i class='bx bx-bar-chart-alt-2'></i>
+
+                @endif
 
             </div>
 
@@ -780,16 +1074,11 @@
             <div class="admin-brand-text">
 
                 <div class="admin-brand-title">
-
                     e-APBDesa
-
                 </div>
-
 
                 <div class="admin-brand-subtitle">
-
                     Sistem Publikasi APBDesa
-
                 </div>
 
             </div>
@@ -797,44 +1086,19 @@
         </div>
 
 
-        {{-- DESA --}}
-
-        <div class="admin-village">
-
-            <div class="admin-village-label">
-
-                Pemerintah Desa
-
-            </div>
-
-
-            <div class="admin-village-name">
-
-                Desa Sumber Jaya
-
-            </div>
-
-
-            <div class="admin-village-desc">
-
-                Panel Administrasi
-
-            </div>
-
-        </div>
-
-
-        {{-- NAVIGATION --}}
+        {{-- =================================================
+             NAVIGATION
+        ================================================== --}}
 
         <nav class="admin-nav">
 
 
             <div class="admin-nav-label">
-
                 Utama
-
             </div>
 
+
+            {{-- Dashboard --}}
 
             <a
                 href="{{ route('admin.dashboard') }}"
@@ -850,6 +1114,8 @@
             </a>
 
 
+            {{-- Pendapatan --}}
+
             <a
                 href="{{ route('admin.pendapatan.index') }}"
                 class="admin-nav-link {{ request()->routeIs('admin.pendapatan.*') ? 'active' : '' }}"
@@ -863,14 +1129,81 @@
 
             </a>
 
-            <a href="{{ route('admin.belanja.index') }}" class="admin-nav-link {{ request()->routeIs('admin.belanja.*') ? 'active' : '' }}"><i class='bx bx-receipt'></i><span>Belanja</span></a>
-            <a href="{{ route('admin.pembiayaan.index') }}" class="admin-nav-link {{ request()->routeIs('admin.pembiayaan.*') ? 'active' : '' }}"><i class='bx bx-transfer'></i><span>Pembiayaan</span></a>
-            <a href="{{ route('admin.realisasi.index') }}" class="admin-nav-link {{ request()->routeIs('admin.realisasi.*') ? 'active' : '' }}"><i class='bx bx-line-chart'></i><span>Realisasi</span></a>
 
-            <div class="admin-nav-label mt-5">Dokumen Publikasi</div>
-            <a href="{{ route('admin.dokumen.index') }}" class="admin-nav-link {{ request()->routeIs('admin.dokumen.*') ? 'active' : '' }}"><i class='bx bx-file'></i><span>Dokumen</span></a>
+            {{-- Belanja --}}
 
-            <div class="admin-nav-label mt-5">Pengaturan</div>
+            <a
+                href="{{ route('admin.belanja.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.belanja.*') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-receipt'></i>
+
+                <span>
+                    Belanja
+                </span>
+
+            </a>
+
+
+            {{-- Pembiayaan --}}
+
+            <a
+                href="{{ route('admin.pembiayaan.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.pembiayaan.*') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-transfer'></i>
+
+                <span>
+                    Pembiayaan
+                </span>
+
+            </a>
+
+
+            {{-- Realisasi --}}
+
+            <a
+                href="{{ route('admin.realisasi.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.realisasi.*') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-line-chart'></i>
+
+                <span>
+                    Realisasi
+                </span>
+
+            </a>
+
+
+            {{-- Dokumen --}}
+
+            <div class="admin-nav-label mt-5">
+                Dokumen Publikasi
+            </div>
+
+
+            <a
+                href="{{ route('admin.dokumen.index') }}"
+                class="admin-nav-link {{ request()->routeIs('admin.dokumen.*') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-file'></i>
+
+                <span>
+                    Dokumen
+                </span>
+
+            </a>
+
+
+            {{-- Pengaturan --}}
+
+            <div class="admin-nav-label mt-5">
+                Pengaturan
+            </div>
 
 
             <a
@@ -903,62 +1236,12 @@
 
         </nav>
 
-
-        {{-- BOTTOM --}}
-
-        <div class="admin-sidebar-bottom">
-
-
-            @auth
-
-                <div class="admin-user-card">
-
-                    <div class="admin-user-name">
-
-                        {{ auth()->user()->name }}
-
-                    </div>
-
-
-                    <div class="admin-user-email">
-
-                        {{ auth()->user()->email }}
-
-                    </div>
-
-                </div>
-
-
-                <form
-                    method="POST"
-                    action="{{ route('logout') }}"
-                >
-
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="admin-logout"
-                    >
-
-                        <i class='bx bx-log-out'></i>
-
-                        <span>
-                            Keluar dari Sistem
-                        </span>
-
-                    </button>
-
-                </form>
-
-            @endauth
-
-        </div>
-
     </aside>
 
 
-    {{-- OVERLAY MOBILE --}}
+    {{-- =====================================================
+         MOBILE OVERLAY
+    ====================================================== --}}
 
     <div
         class="admin-overlay"
@@ -973,13 +1256,16 @@
     <main class="admin-main">
 
 
-        {{-- TOPBAR --}}
+        {{-- =================================================
+             TOPBAR
+        ================================================== --}}
 
         <header class="admin-topbar">
 
 
-            <div class="admin-topbar-left">
+            {{-- LEFT --}}
 
+            <div class="admin-topbar-left">
 
                 <button
                     type="button"
@@ -995,16 +1281,11 @@
                 <div>
 
                     <div class="admin-page-label">
-
                         Administrasi
-
                     </div>
 
-
                     <div class="admin-page-title">
-
                         @yield('title', 'Dashboard')
-
                     </div>
 
                 </div>
@@ -1012,25 +1293,160 @@
             </div>
 
 
-            <a
-                href="{{ route('home') }}"
-                class="admin-public-link"
-                target="_blank"
-            >
+            {{-- RIGHT --}}
 
-                <i class='bx bx-globe'></i>
+            <div class="admin-topbar-right">
 
-                <span>
-                    Lihat Publik
-                </span>
 
-            </a>
+                {{-- LIHAT PUBLIK --}}
 
+                <a
+                    href="{{ route('home') }}"
+                    class="admin-public-link"
+                    target="_blank"
+                >
+
+                    <i class='bx bx-globe'></i>
+
+                    <span>
+                        Lihat Publik
+                    </span>
+
+                </a>
+
+
+                {{-- ACCOUNT --}}
+
+                @auth
+
+                    <div
+                        class="admin-account"
+                        id="admin-account"
+                    >
+
+
+                        {{-- ACCOUNT BUTTON --}}
+
+                        <button
+                            type="button"
+                            class="admin-account-button"
+                            id="admin-account-button"
+                        >
+
+                            <div class="admin-account-avatar">
+
+                                {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+
+                            </div>
+
+
+                            <div class="admin-account-info">
+
+                                <div class="admin-account-name">
+
+                                    {{ auth()->user()->name }}
+
+                                </div>
+
+                                <div class="admin-account-role">
+
+                                    Administrator
+
+                                </div>
+
+                            </div>
+
+
+                            <i class='bx bx-chevron-down admin-account-chevron'></i>
+
+                        </button>
+
+
+                        {{-- ACCOUNT MENU --}}
+
+                        <div class="admin-account-menu">
+
+
+                            <div class="admin-account-header">
+
+                                <div class="admin-account-header-name">
+
+                                    {{ auth()->user()->name }}
+
+                                </div>
+
+                                <div class="admin-account-header-email">
+
+                                    {{ auth()->user()->email }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="admin-account-menu-divider"></div>
+
+
+                            {{-- PROFIL AKUN --}}
+
+                            @if(Route::has('profile.edit'))
+
+                                <a
+                                    href="{{ route('profile.edit') }}"
+                                    class="admin-account-menu-link"
+                                >
+
+                                    <i class='bx bx-user'></i>
+
+                                    <span>
+                                        Profil Administrator
+                                    </span>
+
+                                </a>
+
+                            @endif
+
+
+                            {{-- LOGOUT --}}
+
+                            <form
+                                method="POST"
+                                action="{{ route('logout') }}"
+                            >
+
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="admin-account-menu-link logout"
+                                >
+
+                                    <i class='bx bx-log-out'></i>
+
+                                    <span>
+                                        Keluar dari Sistem
+                                    </span>
+
+                                </button>
+
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+                @endauth
+
+
+            </div>
 
         </header>
 
 
-        {{-- CONTENT --}}
+        {{-- =================================================
+             CONTENT
+        ================================================== --}}
 
         <div class="admin-content">
 
@@ -1061,6 +1477,10 @@
 
 
 <script>
+
+    /* =====================================================
+       SIDEBAR MOBILE
+    ====================================================== */
 
     const adminMenuButton =
         document.getElementById('admin-menu-button');
@@ -1122,6 +1542,50 @@
             });
 
         });
+
+
+    /* =====================================================
+       ACCOUNT DROPDOWN
+    ====================================================== */
+
+    const adminAccount =
+        document.getElementById('admin-account');
+
+    const adminAccountButton =
+        document.getElementById('admin-account-button');
+
+
+    if (adminAccountButton && adminAccount) {
+
+        adminAccountButton.addEventListener(
+            'click',
+            function(event) {
+
+                event.stopPropagation();
+
+                adminAccount.classList.toggle('open');
+
+            }
+        );
+
+    }
+
+
+    document.addEventListener(
+        'click',
+        function(event) {
+
+            if (
+                adminAccount &&
+                !adminAccount.contains(event.target)
+            ) {
+
+                adminAccount.classList.remove('open');
+
+            }
+
+        }
+    );
 
 </script>
 

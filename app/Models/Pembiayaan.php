@@ -1,1 +1,50 @@
-<?php namespace App\Models; use Illuminate\Database\Eloquent\Model; class Pembiayaan extends Model {protected $table='pembiayaan'; protected $fillable=['tahun_anggaran_id','jenis','kode','uraian','anggaran','urutan','status_publikasi']; protected $casts=['anggaran'=>'decimal:2']; public function tahunAnggaran(){return $this->belongsTo(TahunAnggaran::class);} public function realisasi(){return $this->hasMany(RealisasiPembiayaan::class);} public function scopePublik($q){return $q->where('status_publikasi','dipublikasikan');}}
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Pembiayaan extends Model
+{
+    protected $table = 'pembiayaan';
+
+    protected $fillable = [
+        'tahun_anggaran_id',
+        'pembiayaan_rekening_id',
+        'jenis',
+        'kode',
+        'uraian',
+        'anggaran',
+        'urutan',
+        'status_publikasi',
+    ];
+
+    protected $casts = [
+        'anggaran' => 'decimal:2',
+    ];
+
+    public function tahunAnggaran(): BelongsTo
+    {
+        return $this->belongsTo(
+            TahunAnggaran::class,
+            'tahun_anggaran_id'
+        );
+    }
+
+    public function pembiayaanRekening(): BelongsTo
+    {
+        return $this->belongsTo(
+            PembiayaanRekening::class,
+            'pembiayaan_rekening_id'
+        );
+    }
+
+    public function scopePublik($query)
+    {
+        return $query->where(
+            'status_publikasi',
+            'dipublikasikan'
+        );
+    }
+}

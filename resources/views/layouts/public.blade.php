@@ -5,18 +5,51 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+
+    {{-- =====================================================
+         DATA PROFIL DESA
+    ====================================================== --}}
+
+    @php
+
+        $namaDesa = trim(
+            $desa->nama ?? 'Profil Desa'
+        );
+
+        $namaDesaBersih = preg_replace(
+            '/^\s*desa\s+/i',
+            '',
+            $namaDesa
+        );
+
+    @endphp
+
 
     <title>
-        @yield('title', 'e-APBDesa') - Desa Sumber Jaya
+        @yield('title', 'e-APBDesa') -
+        {{ $namaDesa }}
     </title>
+
 
     <meta
         name="description"
-        content="Publikasi APB Desa Sumber Jaya"
+        content="Publikasi APBDesa {{ $namaDesa }}"
     >
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    {{-- =====================================================
+         FONT
+    ====================================================== --}}
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
@@ -29,10 +62,20 @@
         rel="stylesheet"
     >
 
+
+    {{-- =====================================================
+         BOXICONS
+    ====================================================== --}}
+
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
+
+
+    {{-- =====================================================
+         VITE
+    ====================================================== --}}
 
     @vite([
         'resources/css/app.css',
@@ -42,17 +85,38 @@
 
     <style>
 
-        * {
+        /* =====================================================
+           GLOBAL RESET
+        ===================================================== */
+
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
         }
 
+
         html {
+            width: 100%;
+            max-width: 100%;
+
+            margin: 0;
+            padding: 0;
+
             scroll-behavior: smooth;
+
+            overflow-x: hidden;
         }
 
+
         body {
-            margin: 0;
+            width: 100%;
+            max-width: 100%;
+
             min-height: 100vh;
+
+            margin: 0;
+            padding: 0;
 
             font-family: "Poppins", sans-serif;
 
@@ -70,6 +134,8 @@
                     transparent 35%
                 ),
                 #f8fafc;
+
+            overflow-x: hidden;
         }
 
 
@@ -85,6 +151,7 @@
             left: 0;
 
             width: 100%;
+            max-width: 100%;
 
             padding: 16px 6%;
 
@@ -93,10 +160,14 @@
             justify-content: space-between;
             align-items: center;
 
-            background: rgba(15, 23, 42, .72);
+            background:
+                rgba(15, 23, 42, .72);
 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
 
             border-bottom:
                 1px solid rgba(255,255,255,.15);
@@ -106,7 +177,11 @@
 
             z-index: 1000;
 
-            overflow: hidden;
+            /*
+             * Tetap visible karena dropdown menu mobile
+             * berada di bawah header.
+             */
+            overflow: visible;
         }
 
 
@@ -130,7 +205,10 @@
                     transparent
                 );
 
-            transition: .7s;
+            transition:
+                .7s;
+
+            pointer-events: none;
         }
 
 
@@ -158,6 +236,8 @@
             text-decoration: none;
 
             z-index: 2;
+
+            min-width: 0;
         }
 
 
@@ -170,6 +250,8 @@
 
             align-items: center;
             justify-content: center;
+
+            flex: 0 0 44px;
 
             border-radius: 12px;
 
@@ -190,6 +272,8 @@
             flex-direction: column;
 
             line-height: 1.15;
+
+            min-width: 0;
         }
 
 
@@ -200,6 +284,8 @@
             font-weight: 700;
 
             letter-spacing: .2px;
+
+            white-space: nowrap;
         }
 
 
@@ -217,6 +303,14 @@
             text-transform: uppercase;
 
             letter-spacing: 1px;
+
+            max-width: 220px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
         }
 
 
@@ -234,7 +328,9 @@
 
             position: relative;
 
-            z-index: 2;
+            z-index: 1001;
+
+            min-width: 0;
         }
 
 
@@ -261,7 +357,8 @@
 
             border-radius: 10px;
 
-            transition: .3s;
+            transition:
+                .3s;
         }
 
 
@@ -298,7 +395,8 @@
 
             border-radius: 99px;
 
-            background: #60a5fa;
+            background:
+                #60a5fa;
         }
 
 
@@ -308,7 +406,8 @@
 
         .eapb-login {
 
-            margin-left: 8px !important;
+            margin-left:
+                8px !important;
 
             border:
                 1px solid rgba(255,255,255,.25) !important;
@@ -326,32 +425,87 @@
 
 
         /* =====================================================
-           MOBILE MENU
+           MOBILE MENU BUTTON
         ===================================================== */
 
         #eapb-menu-icon {
 
             display: none;
 
+            width: 42px;
+            height: 42px;
+
+            align-items: center;
+            justify-content: center;
+
             color: white;
 
-            font-size: 34px;
+            font-size: 32px;
 
             cursor: pointer;
 
-            z-index: 1002;
+            z-index: 1003;
+
+            flex-shrink: 0;
+
+            user-select: none;
+
+            -webkit-tap-highlight-color: transparent;
+
+            border-radius: 10px;
+
+            transition:
+                background .25s ease,
+                transform .25s ease;
+        }
+
+
+        #eapb-menu-icon:hover {
+
+            background:
+                rgba(255,255,255,.12);
+        }
+
+
+        #eapb-menu-icon:active {
+
+            transform:
+                scale(.92);
         }
 
 
         /* =====================================================
-           CONTENT
+           CONTENT UTAMA
         ===================================================== */
 
         .eapb-content {
 
+            width: 100%;
+            max-width: 100%;
+
+            min-width: 0;
             min-height: 100vh;
 
             padding-top: 92px;
+
+            /*
+             * Penting untuk halaman APBDesa,
+             * Pendapatan, Belanja, Pembiayaan dan Realisasi.
+             */
+            overflow-x: hidden;
+        }
+
+
+        /*
+         * Semua direct child content tidak boleh
+         * memaksa viewport menjadi lebih lebar.
+         */
+
+        .eapb-content > * {
+
+            max-width: 100%;
+
+            min-width: 0;
         }
 
 
@@ -361,19 +515,27 @@
 
         .eapb-footer {
 
+            width: 100%;
+            max-width: 100%;
+
             margin-top: 50px;
 
-            padding: 35px 6%;
+            padding:
+                35px 6%;
 
-            background: #0f172a;
+            background:
+                #0f172a;
 
             color:
                 rgba(255,255,255,.75);
+
+            overflow-x: hidden;
         }
 
 
         .eapb-footer-inner {
 
+            width: 100%;
             max-width: 1200px;
 
             margin: auto;
@@ -410,11 +572,14 @@
 
         .eapb-footer-bottom {
 
+            width: 100%;
             max-width: 1200px;
 
-            margin: 25px auto 0;
+            margin:
+                25px auto 0;
 
-            padding-top: 20px;
+            padding-top:
+                20px;
 
             border-top:
                 1px solid rgba(255,255,255,.1);
@@ -434,15 +599,18 @@
 
             .eapb-header {
 
-                padding: 14px 4%;
+                padding:
+                    14px 4%;
             }
 
 
             .eapb-navbar a {
 
-                padding: 9px 10px;
+                padding:
+                    9px 10px;
 
-                font-size: 13px;
+                font-size:
+                    13px;
             }
 
         }
@@ -454,85 +622,262 @@
 
         @media (max-width: 768px) {
 
+            html,
+            body {
+
+                width: 100% !important;
+                max-width: 100% !important;
+
+                overflow-x: hidden !important;
+            }
+
+
+            .eapb-header {
+
+                width: 100% !important;
+                max-width: 100% !important;
+
+                padding:
+                    12px 5%;
+
+                min-height:
+                    68px;
+
+                /*
+                 * WAJIB visible agar dropdown tidak terpotong.
+                 */
+                overflow:
+                    visible;
+            }
+
+
+            .eapb-logo {
+
+                max-width:
+                    calc(100% - 52px);
+            }
+
+
             #eapb-menu-icon {
 
-                display: block;
+                display:
+                    flex;
             }
 
 
             .eapb-navbar {
 
-                position: absolute;
+                position:
+                    absolute;
 
-                top: 100%;
-                left: 0;
+                top:
+                    100%;
 
-                width: 100%;
+                left:
+                    0;
+
+                width:
+                    100%;
+
+                max-width:
+                    100%;
 
                 padding:
                     15px 5% 20px;
 
-                display: none;
+                display:
+                    none;
 
-                flex-direction: column;
+                flex-direction:
+                    column;
 
-                align-items: stretch;
+                align-items:
+                    stretch;
 
-                gap: 4px;
+                gap:
+                    4px;
 
                 background:
-                    rgba(15, 23, 42, .90);
+                    rgba(15, 23, 42, .97);
 
-                backdrop-filter: blur(18px);
-                -webkit-backdrop-filter: blur(18px);
+                backdrop-filter:
+                    blur(18px);
+
+                -webkit-backdrop-filter:
+                    blur(18px);
 
                 border-bottom:
                     1px solid rgba(255,255,255,.15);
 
                 box-shadow:
-                    0 15px 30px rgba(0,0,0,.15);
+                    0 15px 30px rgba(0,0,0,.20);
+
+                z-index:
+                    1002;
+
+                max-height:
+                    calc(100vh - 68px);
+
+                overflow-y:
+                    auto;
+
+                overflow-x:
+                    hidden;
             }
 
 
             .eapb-navbar.active {
 
-                display: flex;
+                display:
+                    flex !important;
             }
 
 
             .eapb-navbar a {
 
-                width: 100%;
+                width:
+                    100%;
 
-                padding: 13px 15px;
+                min-height:
+                    46px;
 
-                font-size: 14px;
+                padding:
+                    13px 15px;
+
+                font-size:
+                    14px;
+
+                justify-content:
+                    flex-start;
+
+                color:
+                    rgba(255,255,255,.92);
+            }
+
+
+            .eapb-navbar a:hover {
+
+                background:
+                    rgba(255,255,255,.12);
+            }
+
+
+            .eapb-navbar a.active {
+
+                background:
+                    rgba(255,255,255,.15);
             }
 
 
             .eapb-navbar a.active::after {
 
-                display: none;
+                display:
+                    none;
             }
 
 
             .eapb-login {
 
-                margin-left: 0 !important;
+                margin-left:
+                    0 !important;
 
-                margin-top: 5px;
+                margin-top:
+                    5px;
             }
 
 
             .eapb-logo-subtitle {
 
-                display: none;
+                display:
+                    none;
             }
 
 
+            /* =================================================
+               CONTENT MOBILE
+            ================================================= */
+
             .eapb-content {
 
-                padding-top: 82px;
+                width:
+                    100% !important;
+
+                max-width:
+                    100% !important;
+
+                min-width:
+                    0 !important;
+
+                padding-top:
+                    82px;
+
+                overflow-x:
+                    hidden !important;
+            }
+
+
+            .eapb-content > * {
+
+                width:
+                    100%;
+
+                max-width:
+                    100%;
+
+                min-width:
+                    0;
+            }
+
+
+            /* =================================================
+               FOOTER MOBILE
+            ================================================= */
+
+            .eapb-footer {
+
+                width:
+                    100% !important;
+
+                max-width:
+                    100% !important;
+
+                padding:
+                    28px 5%;
+
+                overflow-x:
+                    hidden;
+            }
+
+
+            .eapb-footer-inner {
+
+                width:
+                    100%;
+
+                max-width:
+                    100%;
+
+                flex-direction:
+                    column;
+
+                gap:
+                    20px;
+            }
+
+
+            .eapb-footer-bottom {
+
+                width:
+                    100%;
+
+                max-width:
+                    100%;
+
+                overflow-wrap:
+                    anywhere;
+
+                word-break:
+                    break-word;
             }
 
         }
@@ -546,15 +891,59 @@
 
             .eapb-logo-title {
 
-                font-size: 17px;
+                font-size:
+                    17px;
             }
 
 
             .eapb-logo-icon {
 
-                width: 40px;
+                width:
+                    40px;
 
-                height: 40px;
+                height:
+                    40px;
+
+                flex-basis:
+                    40px;
+            }
+
+
+            #eapb-menu-icon {
+
+                width:
+                    40px;
+
+                height:
+                    40px;
+
+                font-size:
+                    30px;
+            }
+
+
+            .eapb-content {
+
+                padding-top:
+                    78px;
+            }
+
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            * {
+                transition:
+                    none !important;
             }
 
         }
@@ -569,12 +958,14 @@
 
     {{-- =====================================================
          HEADER
-    ====================================================== --}}
+    ===================================================== --}}
 
     <header class="eapb-header">
 
 
-        {{-- LOGO --}}
+        {{-- =================================================
+             LOGO
+        ================================================== --}}
 
         <a
             href="{{ route('home') }}"
@@ -599,7 +990,7 @@
 
                 <span class="eapb-logo-subtitle">
 
-                    Desa Sumber Jaya
+                    {{ $namaDesa }}
 
                 </span>
 
@@ -608,11 +999,17 @@
         </a>
 
 
-        {{-- MOBILE MENU BUTTON --}}
+        {{-- =================================================
+             MOBILE MENU BUTTON
+        ================================================== --}}
 
         <i
             class='bx bx-menu'
             id="eapb-menu-icon"
+            role="button"
+            aria-label="Buka menu"
+            aria-expanded="false"
+            tabindex="0"
         ></i>
 
 
@@ -657,9 +1054,53 @@
 
             </a>
 
-            <a href="{{ route('pendapatan', $year->tahun) }}" class="{{ request()->routeIs('pendapatan') ? 'active' : '' }}"><i class='bx bx-trending-up'></i><span>Pendapatan</span></a>
-            <a href="{{ route('belanja', $year->tahun) }}" class="{{ request()->routeIs('belanja') ? 'active' : '' }}"><i class='bx bx-receipt'></i><span>Belanja</span></a>
-            <a href="{{ route('pembiayaan', $year->tahun) }}" class="{{ request()->routeIs('pembiayaan') ? 'active' : '' }}"><i class='bx bx-transfer'></i><span>Pembiayaan</span></a>
+
+            {{-- PENDAPATAN --}}
+
+            <a
+                href="{{ route('pendapatan', $year->tahun) }}"
+                class="{{ request()->routeIs('pendapatan') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-trending-up'></i>
+
+                <span>
+                    Pendapatan
+                </span>
+
+            </a>
+
+
+            {{-- BELANJA --}}
+
+            <a
+                href="{{ route('belanja', $year->tahun) }}"
+                class="{{ request()->routeIs('belanja') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-receipt'></i>
+
+                <span>
+                    Belanja
+                </span>
+
+            </a>
+
+
+            {{-- PEMBIAYAAN --}}
+
+            <a
+                href="{{ route('pembiayaan', $year->tahun) }}"
+                class="{{ request()->routeIs('pembiayaan') ? 'active' : '' }}"
+            >
+
+                <i class='bx bx-transfer'></i>
+
+                <span>
+                    Pembiayaan
+                </span>
+
+            </a>
 
 
             {{-- REALISASI --}}
@@ -710,7 +1151,9 @@
             </a>
 
 
-            {{-- LOGIN / ADMIN --}}
+            {{-- =================================================
+                 LOGIN / ADMIN
+            ================================================== --}}
 
             @auth
 
@@ -771,6 +1214,8 @@
         <div class="eapb-footer-inner">
 
 
+            {{-- INFORMASI APLIKASI --}}
+
             <div>
 
                 <div class="eapb-footer-title">
@@ -790,20 +1235,44 @@
             </div>
 
 
+            {{-- =================================================
+                 PROFIL DESA
+            ================================================== --}}
+
             <div>
 
                 <div class="eapb-footer-title">
 
-                    Desa Sumber Jaya
+                    {{ $namaDesa }}
 
                 </div>
 
 
                 <p>
 
-                    Kecamatan Pelaihari<br>
+                    @if(!empty($desa->kecamatan))
 
-                    Kabupaten Tanah Laut
+                        Kecamatan {{ $desa->kecamatan }}
+
+                    @endif
+
+
+                    @if(!empty($desa->kabupaten))
+
+                        <br>
+
+                        Kabupaten {{ $desa->kabupaten }}
+
+                    @endif
+
+
+                    @if(!empty($desa->provinsi))
+
+                        <br>
+
+                        {{ $desa->provinsi }}
+
+                    @endif
 
                 </p>
 
@@ -813,11 +1282,15 @@
         </div>
 
 
+        {{-- =================================================
+             FOOTER BOTTOM
+        ================================================== --}}
+
         <div class="eapb-footer-bottom">
 
             © {{ date('Y') }}
 
-            Pemerintah Desa Sumber Jaya.
+            Pemerintah {{ $namaDesa }}.
 
             Semua informasi APBDesa dipublikasikan
             untuk masyarakat.
@@ -834,26 +1307,190 @@
 
     <script>
 
-        const menuIcon =
-            document.querySelector('#eapb-menu-icon');
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
 
-        const navbar =
-            document.querySelector('#eapb-navbar');
+                const menuIcon =
+                    document.getElementById('eapb-menu-icon');
+
+                const navbar =
+                    document.getElementById('eapb-navbar');
 
 
-        if (menuIcon && navbar) {
+                if (!menuIcon || !navbar) {
+                    return;
+                }
 
-            menuIcon.addEventListener('click', function () {
 
-                menuIcon.classList.toggle('bx-menu');
+                /* =================================================
+                   BUKA / TUTUP MENU
+                ================================================== */
 
-                menuIcon.classList.toggle('bx-x');
+                function toggleMenu() {
 
-                navbar.classList.toggle('active');
+                    const isOpen =
+                        navbar.classList.toggle('active');
 
-            });
 
-        }
+                    menuIcon.classList.toggle(
+                        'bx-menu',
+                        !isOpen
+                    );
+
+
+                    menuIcon.classList.toggle(
+                        'bx-x',
+                        isOpen
+                    );
+
+
+                    menuIcon.setAttribute(
+                        'aria-expanded',
+                        isOpen ? 'true' : 'false'
+                    );
+
+
+                    menuIcon.setAttribute(
+                        'aria-label',
+                        isOpen
+                            ? 'Tutup menu'
+                            : 'Buka menu'
+                    );
+
+                }
+
+
+                /* =================================================
+                   TUTUP MENU
+                ================================================== */
+
+                function closeMenu() {
+
+                    navbar.classList.remove('active');
+
+
+                    menuIcon.classList.remove('bx-x');
+
+
+                    menuIcon.classList.add('bx-menu');
+
+
+                    menuIcon.setAttribute(
+                        'aria-expanded',
+                        'false'
+                    );
+
+
+                    menuIcon.setAttribute(
+                        'aria-label',
+                        'Buka menu'
+                    );
+
+                }
+
+
+                /* =================================================
+                   KLIK TOMBOL MENU
+                ================================================== */
+
+                menuIcon.addEventListener(
+                    'click',
+                    function (event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+                        toggleMenu();
+
+                    }
+                );
+
+
+                /* =================================================
+                   KEYBOARD ENTER / SPACE
+                ================================================== */
+
+                menuIcon.addEventListener(
+                    'keydown',
+                    function (event) {
+
+                        if (
+                            event.key === 'Enter' ||
+                            event.key === ' '
+                        ) {
+
+                            event.preventDefault();
+
+                            toggleMenu();
+
+                        }
+
+                    }
+                );
+
+
+                /* =================================================
+                   KLIK LINK MENU
+                ================================================== */
+
+                navbar
+                    .querySelectorAll('a')
+                    .forEach(function (link) {
+
+                        link.addEventListener(
+                            'click',
+                            function () {
+
+                                closeMenu();
+
+                            }
+                        );
+
+                    });
+
+
+                /* =================================================
+                   KLIK DI LUAR MENU
+                ================================================== */
+
+                document.addEventListener(
+                    'click',
+                    function (event) {
+
+                        if (
+                            !navbar.contains(event.target) &&
+                            !menuIcon.contains(event.target)
+                        ) {
+
+                            closeMenu();
+
+                        }
+
+                    }
+                );
+
+
+                /* =================================================
+                   RESET SAAT KEMBALI KE DESKTOP
+                ================================================== */
+
+                window.addEventListener(
+                    'resize',
+                    function () {
+
+                        if (window.innerWidth > 768) {
+
+                            closeMenu();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
 
     </script>
 

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Realisasi')
+@section('title', 'Edit Realisasi')
 
 @section('content')
 
@@ -8,7 +8,9 @@
 
     {{-- HEADER --}}
     <div class="mb-7">
+
         <div class="flex items-center gap-3">
+
             <a
                 href="{{ route('admin.realisasi.index') }}"
                 class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
@@ -19,47 +21,64 @@
 
             <div>
                 <h1 class="text-2xl font-bold tracking-tight text-slate-900">
-                    Tambah Realisasi
+                    Edit Realisasi
                 </h1>
 
                 <p class="mt-1 text-sm text-slate-500">
-                    Catat realisasi pendapatan, belanja, atau pembiayaan.
+                    Perbarui data realisasi anggaran Desa.
                 </p>
             </div>
+
         </div>
+
     </div>
 
 
     {{-- FORM --}}
     <form
-        x-data="realisasiForm()"
+        x-data="realisasiEditForm()"
         method="POST"
-        action="{{ route('admin.realisasi.store') }}"
+        action="{{ route('admin.realisasi.update', [$jenis, $realisasi->id]) }}"
         class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
     >
 
         @csrf
+        @method('PUT')
 
 
         {{-- ERROR VALIDATION --}}
         @if ($errors->any())
+
             <div class="m-6 rounded-xl border border-red-200 bg-red-50 p-4">
+
                 <div class="flex gap-3">
+
                     <i class="bx bx-error-circle mt-0.5 text-xl text-red-600"></i>
 
                     <div>
+
                         <p class="font-semibold text-red-800">
-                            Data belum dapat disimpan.
+                            Data belum dapat diperbarui.
                         </p>
 
                         <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-red-700">
+
                             @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+
+                                <li>
+                                    {{ $error }}
+                                </li>
+
                             @endforeach
+
                         </ul>
+
                     </div>
+
                 </div>
+
             </div>
+
         @endif
 
 
@@ -68,8 +87,10 @@
 
             <div class="grid gap-6 md:grid-cols-2">
 
-                {{-- JENIS --}}
+
+                {{-- JENIS REALISASI --}}
                 <div>
+
                     <label
                         for="jenis"
                         class="mb-2 block text-sm font-semibold text-slate-700"
@@ -78,16 +99,17 @@
                     </label>
 
                     <div class="relative">
+
                         <i class="bx bx-category absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
 
                         <select
                             id="jenis"
                             name="jenis"
                             x-model="jenis"
-                            @change="item = ''"
-                            required
-                            class="w-full appearance-none rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-10 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            disabled
+                            class="w-full appearance-none rounded-xl border border-slate-300 bg-slate-100 py-3 pl-10 pr-10 text-sm font-medium text-slate-600 outline-none"
                         >
+
                             <option value="pendapatan">
                                 Pendapatan
                             </option>
@@ -99,15 +121,26 @@
                             <option value="pembiayaan">
                                 Pembiayaan
                             </option>
+
                         </select>
 
-                        <i class="bx bx-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+                        <i class="bx bx-lock-alt pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+
                     </div>
+
+                    {{-- Karena select disabled tidak ikut terkirim --}}
+                    <input
+                        type="hidden"
+                        name="jenis"
+                        value="{{ $jenis }}"
+                    >
+
                 </div>
 
 
-                {{-- TAHUN --}}
+                {{-- TAHUN ANGGARAN --}}
                 <div>
+
                     <label
                         for="tahun_anggaran_id"
                         class="mb-2 block text-sm font-semibold text-slate-700"
@@ -116,6 +149,7 @@
                     </label>
 
                     <div class="relative">
+
                         <i class="bx bx-calendar absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
 
                         <select
@@ -126,19 +160,28 @@
                             required
                             class="w-full appearance-none rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-10 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         >
+
                             @foreach ($years as $year)
-                                <option value="{{ $year->id }}">
+
+                                <option
+                                    value="{{ $year->id }}"
+                                    {{ (int) $year->id === (int) $realisasi->{$jenis}->tahun_anggaran_id ? 'selected' : '' }}
+                                >
                                     {{ $year->tahun }}
                                 </option>
+
                             @endforeach
+
                         </select>
 
                         <i class="bx bx-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+
                     </div>
+
                 </div>
 
 
-                {{-- REKENING / ITEM --}}
+                {{-- REKENING --}}
                 <div class="md:col-span-2">
 
                     <label
@@ -149,6 +192,7 @@
                     </label>
 
                     <div class="relative">
+
                         <i class="bx bx-list-ul absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
 
                         <select
@@ -241,10 +285,11 @@
                         </select>
 
                         <i class="bx bx-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+
                     </div>
 
                     <p class="mt-2 text-xs text-slate-400">
-                        Rekening yang ditampilkan mengikuti jenis dan tahun anggaran yang dipilih.
+                        Rekening mengikuti Tahun Anggaran yang dipilih.
                     </p>
 
                 </div>
@@ -252,6 +297,7 @@
 
                 {{-- BULAN --}}
                 <div>
+
                     <label
                         for="bulan"
                         class="mb-2 block text-sm font-semibold text-slate-700"
@@ -260,6 +306,7 @@
                     </label>
 
                     <div class="relative">
+
                         <i class="bx bx-calendar-event absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
 
                         <select
@@ -268,29 +315,51 @@
                             required
                             class="w-full appearance-none rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-10 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         >
-                            <option value="">Pilih bulan</option>
 
-                            <option value="1">Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
+                            <option value="">
+                                Pilih bulan
+                            </option>
+
+                            @php
+                                $bulanList = [
+                                    1 => 'Januari',
+                                    2 => 'Februari',
+                                    3 => 'Maret',
+                                    4 => 'April',
+                                    5 => 'Mei',
+                                    6 => 'Juni',
+                                    7 => 'Juli',
+                                    8 => 'Agustus',
+                                    9 => 'September',
+                                    10 => 'Oktober',
+                                    11 => 'November',
+                                    12 => 'Desember',
+                                ];
+                            @endphp
+
+                            @foreach ($bulanList as $nomor => $nama)
+
+                                <option
+                                    value="{{ $nomor }}"
+                                    {{ (int) old('bulan', $realisasi->bulan) === $nomor ? 'selected' : '' }}
+                                >
+                                    {{ $nama }}
+                                </option>
+
+                            @endforeach
+
                         </select>
 
                         <i class="bx bx-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+
                     </div>
+
                 </div>
 
 
                 {{-- TANGGAL --}}
                 <div>
+
                     <label
                         for="tanggal"
                         class="mb-2 block text-sm font-semibold text-slate-700"
@@ -299,17 +368,20 @@
                     </label>
 
                     <div class="relative">
+
                         <i class="bx bx-calendar absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
 
                         <input
                             id="tanggal"
                             type="date"
                             name="tanggal"
-                            value="{{ old('tanggal', date('Y-m-d')) }}"
+                            value="{{ old('tanggal', optional($realisasi->tanggal)->format('Y-m-d')) }}"
                             required
                             class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-4 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         >
+
                     </div>
+
                 </div>
 
 
@@ -324,6 +396,7 @@
                     </label>
 
                     <div class="relative">
+
                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">
                             Rp
                         </span>
@@ -332,13 +405,14 @@
                             id="nilai"
                             type="number"
                             name="nilai"
-                            value="{{ old('nilai') }}"
+                            value="{{ old('nilai', $realisasi->nilai) }}"
                             min="0"
                             step="0.01"
                             required
                             placeholder="0"
                             class="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         >
+
                     </div>
 
                 </div>
@@ -363,7 +437,7 @@
                         rows="4"
                         placeholder="Tambahkan keterangan jika diperlukan..."
                         class="w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                    >{{ old('keterangan') }}</textarea>
+                    >{{ old('keterangan', $realisasi->keterangan) }}</textarea>
 
                 </div>
 
@@ -379,6 +453,7 @@
                     </label>
 
                     <div class="relative">
+
                         <i class="bx bx-globe absolute left-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
 
                         <select
@@ -387,19 +462,25 @@
                             required
                             class="w-full appearance-none rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-10 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         >
-                            <option value="draft">
+
+                            <option
+                                value="draft"
+                                {{ old('status_publikasi', $realisasi->status_publikasi) === 'draft' ? 'selected' : '' }}
+                            >
                                 Draft
                             </option>
 
                             <option
                                 value="dipublikasikan"
-                                {{ old('status_publikasi') === 'dipublikasikan' ? 'selected' : '' }}
+                                {{ old('status_publikasi', $realisasi->status_publikasi) === 'dipublikasikan' ? 'selected' : '' }}
                             >
                                 Dipublikasikan
                             </option>
+
                         </select>
 
                         <i class="bx bx-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400"></i>
+
                     </div>
 
                 </div>
@@ -425,7 +506,7 @@
                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800"
             >
                 <i class="bx bx-save text-lg"></i>
-                Simpan Realisasi
+                Simpan Perubahan
             </button>
 
         </div>
@@ -436,18 +517,23 @@
 
 
 <script>
-    function realisasiForm() {
+    function realisasiEditForm() {
         return {
-            jenis: @json(old('jenis', 'pendapatan')),
+            jenis: @json($jenis),
 
             tahun: @json(
                 old(
                     'tahun_anggaran_id',
-                    optional($years->first())->id
+                    $realisasi->{$jenis}->tahun_anggaran_id
                 )
             ),
 
-            item: @json(old('item_id', '')),
+            item: @json(
+                old(
+                    'item_id',
+                    $realisasi->{$jenis . '_id'}
+                )
+            ),
         };
     }
 </script>

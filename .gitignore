@@ -3,11 +3,20 @@
 /.env
 /public/build
 /storage/*.key
+
 # Laravel runtime
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/views/*
 /storage/logs/*
+
+# Uploaded/public storage
+/storage/app/public/*
+/public/storage
+/public/hot
+
+# Local files
+*.zip
 
 # Bootstrap cache
 /bootstrap/cache/*
